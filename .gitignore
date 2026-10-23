@@ -1,0 +1,11 @@
+node_modules/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+.env
+.env.*
+*.log
+.DS_Store
+# Never commit workspace tokens
+**/tokens*
+**/*token*

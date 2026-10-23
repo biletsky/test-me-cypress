@@ -1,0 +1,11 @@
+{
+  "kyiv": {
+    "address": "Київ, вул. Тестова, 12"
+  },
+  "lviv": {
+    "address": "Львів, пл. Ринок, 1"
+  },
+  "invalid": {
+    "fourCharsAfterTrim": "   Київ   "
+  }
+}

@@ -1,0 +1,36 @@
+name: cypress
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+            spec: cypress/smoke/**/*.cy.js
+          - name: api
+            spec: cypress/e2e/api/**/*.cy.js
+          - name: ui-cart-orders
+            spec: cypress/e2e/ui/checkout.negative.cy.js,cypress/e2e/ui/cart.cy.js,cypress/e2e/ui/orders.cy.js
+          - name: ui-catalog
+            spec: cypress/e2e/ui/catalog.cy.js,cypress/e2e/ui/compare.cy.js,cypress/e2e/ui/reviews.favorites.cy.js,cypress/e2e/ui/mobile.cy.js,cypress/e2e/ui/resilience.a11y.cy.js
+    name: ${{ matrix.group.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          spec: ${{ matrix.group.spec }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: evidence-${{ matrix.group.name }}
+          path: |
+            cypress/screenshots
+            cypress/videos
+          retention-days: 7

@@ -1,0 +1,14 @@
+{
+  "valid": {
+    "name": "Олександр Тестовий",
+    "email": "test@example.test"
+  },
+  "alt": {
+    "name": "Марія Перевірка",
+    "email": "maria.qa@example.test"
+  },
+  "invalid": {
+    "oneCharAfterTrim": "  А  ",
+    "badEmail": "not-an-email"
+  }
+}

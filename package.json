@@ -1,0 +1,21 @@
+{
+  "name": "test-me-cypress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cypress UI + API tests for https://test-me.vzl.one/ (JavaScript)",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:e2e": "cypress run --spec 'cypress/e2e/**/*.cy.js'",
+    "cy:run:smoke": "cypress run --spec 'cypress/smoke/**/*.cy.js'",
+    "cy:run:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.js'",
+    "cy:run:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.js'",
+    "test": "npm run cy:run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0"
+  }
+}

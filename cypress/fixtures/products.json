@@ -1,0 +1,72 @@
+{
+  "orbita": {
+    "id": "p01",
+    "name": "Бездротові навушники «Орбіта»",
+    "category": "Audio",
+    "price": 240000,
+    "stock": 8
+  },
+  "khvylia": {
+    "id": "p02",
+    "name": "Портативна колонка «Хвиля»",
+    "category": "Audio",
+    "price": 150000,
+    "stock": 12
+  },
+  "studio": {
+    "id": "p03",
+    "name": "Механічна клавіатура «Студія»",
+    "category": "Workspace",
+    "price": 320000,
+    "stock": 5
+  },
+  "duha": {
+    "id": "p04",
+    "name": "Настільна лампа «Дуга»",
+    "category": "Workspace",
+    "price": 99900,
+    "stock": 10
+  },
+  "shchodnia": {
+    "id": "p05",
+    "name": "Термопляшка «Щодня»",
+    "category": "Lifestyle",
+    "price": 50000,
+    "stock": 20
+  },
+  "outOfStock": {
+    "id": "p06",
+    "name": "Міський рюкзак «Мандрівник»",
+    "category": "Lifestyle",
+    "price": 210000,
+    "stock": 0
+  },
+  "focus": {
+    "id": "p07",
+    "name": "Таймер «Фокус»",
+    "category": "Workspace",
+    "price": 75000,
+    "stock": 3
+  },
+  "idea": {
+    "id": "p08",
+    "name": "Кишеньковий нотатник «Ідея»",
+    "category": "Lifestyle",
+    "price": 25000,
+    "stock": 30
+  },
+  "enerhiia": {
+    "id": "p13",
+    "name": "Павербанк «Енергія»",
+    "category": "Lifestyle",
+    "price": 165000,
+    "stock": 9
+  },
+  "rytm": {
+    "id": "p14",
+    "name": "Навушники-вкладиші «Ритм»",
+    "category": "Audio",
+    "price": 199000,
+    "stock": 7
+  }
+}
