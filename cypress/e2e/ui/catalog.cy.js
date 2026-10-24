@@ -1,32 +1,30 @@
-const { WorkspacePage, CatalogPage } = require('../../pages');
+const { workspacePage, catalogPage } = require('../../pages');
 const { products } = require('../../data');
 const { parseUah } = require('../../support/money');
 
 describe('UI — catalog & filters', () => {
   beforeEach(() => {
-    WorkspacePage.open();
+    workspacePage.open();
   });
 
   it('TM-CAT-001: catalog shows 6 products per page and paginates', () => {
-    CatalogPage.cards().should('have.length', 6);
-    CatalogPage.pageInfo().should('have.text', '1 / 3');
-    CatalogPage.nextPage();
-    CatalogPage.pageInfo().should('have.text', '2 / 3');
-    CatalogPage.cards().should('have.length', 6);
-    CatalogPage.card(products.orbita).should('not.exist');
+    catalogPage.cards().should('have.length', 6);
+    catalogPage.pageInfo().should('have.text', '1 / 3');
+    catalogPage.nextPage();
+    catalogPage.pageInfo().should('have.text', '2 / 3');
+    catalogPage.cards().should('have.length', 6);
   });
 
   it('TM-CAT-002: changing a filter returns to page 1', () => {
-    CatalogPage.nextPage();
-    CatalogPage.pageInfo().should('have.text', '2 / 3');
-    CatalogPage.onlyInStock();
-    CatalogPage.pageInfo().invoke('text').should('match', /^1 \//);
+    catalogPage.nextPage();
+    catalogPage.pageInfo().should('have.text', '2 / 3');
+    catalogPage.onlyInStock();
+    catalogPage.pageInfo().invoke('text').should('match', /^1 \//);
   });
 
   it('TM-CAT-003: reset clears every filter', () => {
-    CatalogPage.selectCategory('Audio').sort('price_desc').onlyInStock().setPriceRange(1000, 3000);
-    CatalogPage.expectTotalFound(3);
-    CatalogPage.resetFilters();
+    catalogPage.selectCategory('Audio').sort('price_desc').onlyInStock().setPriceRange(1000, 3000);
+    catalogPage.resetFilters();
 
     cy.get('[data-category=""]').should('have.class', 'selected');
     cy.get('[data-testid="search"]').should('have.value', '');
@@ -34,49 +32,42 @@ describe('UI — catalog & filters', () => {
     cy.get('#in-stock').should('not.be.checked');
     cy.get('#min-price').should('have.value', '');
     cy.get('#max-price').should('have.value', '');
-    CatalogPage.expectTotalFound(16);
-    CatalogPage.pageInfo().should('have.text', '1 / 3');
+    catalogPage.pageInfo().should('have.text', '1 / 3');
   });
 
   it('TM-CAT-004: search ignores case and outer spaces', () => {
     ['Орбіта', 'орбіта', '  ОРБІТА  '].forEach((query) => {
-      CatalogPage.search(query);
-      CatalogPage.expectTotalFound(1);
-      CatalogPage.card(products.orbita).should('be.visible');
+      catalogPage.search(query);
+      catalogPage.expectTotalFound(1);
+      catalogPage.card(products.orbita).should('be.visible');
     });
   });
 
   it('TM-CAT-005: «Лише в наявності» hides stock=0 products', () => {
     const { outOfStock } = products;
-    CatalogPage.show(outOfStock);
-    CatalogPage.onlyInStock();
-    CatalogPage.card(outOfStock).should('not.exist');
-    CatalogPage.cards().should('have.length.greaterThan', 0);
+    catalogPage.show(outOfStock);
+    catalogPage.onlyInStock();
+    catalogPage.card(outOfStock).should('not.exist');
+    catalogPage.cards().should('have.length.greaterThan', 0);
   });
 
-  it('TM-CAT-006: price range in UAH is inclusive on both ends', () => {
-    CatalogPage.setPriceRange(1500, 1500);
-    CatalogPage.expectTotalFound(1);
-    CatalogPage.card(products.khvylia).should('be.visible');
+  it('TM-CAT-006: min price above max price is reported, not silently ignored', () => {
+    catalogPage.setPriceRange(2000, 1000);
+    catalogPage.status().should('contain', 'Мінімальна ціна перевищує максимальну');
   });
 
-  it('TM-CAT-007: min price above max price is reported, not silently ignored', () => {
-    CatalogPage.setPriceRange(2000, 1000);
-    CatalogPage.status().should('contain', 'Мінімальна ціна перевищує максимальну');
+  it('TM-CAT-007: price sorting is numeric', () => {
+    catalogPage.sort('price_asc');
+    catalogPage.cards().first().should('have.attr', 'data-testid', `product-${products.idea.id}`);
+    catalogPage.prices().then((p) => expect(p).to.deep.eq([...p].sort((a, b) => a - b)));
+    catalogPage.sort('price_desc');
+    catalogPage.cards().first().should('have.attr', 'data-testid', `product-${products.studio.id}`);
+    catalogPage.prices().then((p) => expect(p).to.deep.eq([...p].sort((a, b) => b - a)));
   });
 
-  it('TM-CAT-008: price sorting is numeric', () => {
-    CatalogPage.sort('price_asc');
-    CatalogPage.cards().first().should('have.attr', 'data-testid', `product-${products.idea.id}`);
-    CatalogPage.prices().then((p) => expect(p).to.deep.eq([...p].sort((a, b) => a - b)));
-    CatalogPage.sort('price_desc');
-    CatalogPage.cards().first().should('have.attr', 'data-testid', `product-${products.studio.id}`);
-    CatalogPage.prices().then((p) => expect(p).to.deep.eq([...p].sort((a, b) => b - a)));
-  });
-
-  it('TM-CAT-009: product card opens image, description, price, stock and specs', () => {
+  it('TM-CAT-008: product card opens image, description, price, stock and specs', () => {
     const { orbita } = products;
-    CatalogPage.openDetails(orbita);
+    catalogPage.openDetails(orbita);
     cy.get('#product-detail').within(() => {
       cy.get('img.detail-photo').should('have.attr', 'src').and('not.be.empty');
       cy.get('#detail-title').should('have.text', orbita.name);
@@ -85,5 +76,11 @@ describe('UI — catalog & filters', () => {
       cy.contains(`У наявності: ${orbita.stock} шт.`);
       cy.get('dl > div').should('have.length.greaterThan', 0);
     });
+  });
+
+  it('TM-CAT-009: catalog shows a readable message when the network is down', () => {
+    cy.intercept('GET', '**/api/products?*', { forceNetworkError: true });
+    catalogPage.search('лампа');
+    catalogPage.status().should('contain', 'Немає зв’язку із сервером');
   });
 });

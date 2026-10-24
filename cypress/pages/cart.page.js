@@ -88,6 +88,10 @@ class CartPage extends BasePage {
     return this;
   }
 
+  checkoutForm() {
+    return cy.get('#checkout-form');
+  }
+
   expectTotals(expected) {
     cy.get('#totals').should(($t) => {
       expect(readTotals($t)).to.deep.equal(expected);

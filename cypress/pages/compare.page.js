@@ -23,6 +23,14 @@ class ComparePage extends BasePage {
     return this;
   }
 
+  compareBar() {
+    return cy.get('#compare-bar');
+  }
+
+  get compareHeaders() {
+    return cy.get('#compare-content tbody th');
+  }
+
   row(label) {
     return cy
       .get('#compare-content tbody tr')
