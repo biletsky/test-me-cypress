@@ -9,12 +9,6 @@
 const { BasePage } = require('./base.page');
 const STORAGE_KEY = 'test-me:v2';
 
-/*const WorkspacePage = {
-  open(path = '/') {
-    cy.visit(path);
-    return this.waitUntilReady();
-  },*/
-
 class WorkspacePage extends BasePage {
 
   startFresh() {

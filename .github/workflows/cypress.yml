@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         group:
-            spec: cypress/smoke/**/*.cy.js
+          spec: cypress/smoke/**/*.cy.js
           - name: api
             spec: cypress/e2e/api/**/*.cy.js
           - name: ui-cart-orders

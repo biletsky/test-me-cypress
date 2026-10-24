@@ -4,6 +4,6 @@
  * defaultCommandTimeout on failure. This asserts once and fails fast.
  */
 Cypress.Commands.add('expectStatus', { prevSubject: true }, (res, status, message) => {
-  expect(res.status, message || 'HTTP status').to.eq(status);
-  return res;
+    expect(res.status, message || 'HTTP status').to.eq(status);
+    return res;
 });

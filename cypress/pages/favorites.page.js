@@ -9,7 +9,6 @@ class FavoritesPage extends BasePage {
     favoriteItem(id) {
         return cy.get(`#favorites-list [data-favorite="${id}"]`);
     }
-
 }
 
 module.exports = { FavoritesPage };
