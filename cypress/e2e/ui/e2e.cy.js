@@ -24,6 +24,7 @@ describe('E2E tests', () => {
         workspacePage.toast().should('contain', 'Замовлення успішно оформлено');
         workspacePage.openOrders();
         ordersPage.status().should('have.text', 'Підтверджено');
+        ordersPage.card().contains('button', 'Повторити замовлення').should('exist');
         ordersPage.card().contains('button', 'Скасувати замовлення').should('exist');
     });
 
@@ -46,5 +47,27 @@ describe('E2E tests', () => {
         cartPage.placeOrder();
         cartPage.error().should('contain', '402 · Тестовий платіж відхилено');
         workspacePage.cartCount().should('have.text', 8);
+    });
+
+
+    it('TM-E2E-00: Positive:Successfully placed an order with valid promo code and approved payment without page objects and fixtures', () => {
+        cy.get('[data-testid=search]').type('Орбіта');
+        cy.get('[data-testid=product-p01]').should('be.visible');
+        cy.get('[data-testid=product-p01] .product-title').should('have.text', 'Бездротові навушники «Орбіта»');
+        cy.get('[data-add="p01"]').click();
+        cy.get('#cart-count').should('have.text', 1);
+        cy.get('[data-testid=cart-open]').click();
+        cy.get('[data-delta="1"]').click();
+        cy.get('#cart-count').should('have.text', 2);
+        cy.get('[data-testid=coupon]').type('WELCOME10');
+        cy.get('#apply-coupon').click();
+        cy.get('#customer-name').type('Тест Тестовий');
+        cy.get('#email').type('test@example.com');
+        cy.get('#address').type('Київ, Україна');
+        cy.get('[data-testid=place-order]').click();
+        cy.get('#toast').should('be.visible').and('contain', 'Замовлення успішно оформлено');
+        cy.get('.status-pill').should('have.text', 'Підтверджено');
+        cy.get('#orders-list [data-testid=order-card]').contains('button', 'Скасувати замовлення').should('be.visible');
+        cy.get('#orders-list [data-testid=order-card]').contains('button', 'Повторити замовлення').should('be.visible');
     });
 });
